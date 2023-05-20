@@ -17,13 +17,14 @@ $blue: #4361ee;
     }
   }
 
-  &Full {
-    &:hover {
-      background-color: #fff;
-      border: 1px solid #dedede;
-      box-shadow: none;
-    }
-  }
+  // &Full {
+  //   &:hover {
+  //     background-color: #fff;
+  //     border: 1px solid #dedede;
+  //     box-shadow: none;
+      
+  //   }
+  // }
 }
 
 .image {
@@ -110,6 +111,9 @@ $blue: #4361ee;
     svg {
       font-size: 18px;
       margin-right: 5px;
+    }
+    span{
+      align-self: flex-start;
     }
   }
 }

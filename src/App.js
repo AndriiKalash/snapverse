@@ -1,20 +1,42 @@
 import Container from "@mui/material/Container";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchAuthMe } from "./redux/auth/slice";
 import { Header } from "./components";
-import { Home, FullPost, Registration, AddPost, Login } from "./pages";
+import {
+  Home,
+  FullPost,
+  Registration,
+  AddPost,
+  Login,
+  HashPosts,
+} from "./pages";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (window.localStorage.getItem("token")) {
+      dispatch(fetchAuthMe());
+    }
+  }, []);
+
   return (
-    <>
+    <BrowserRouter>
       <Header />
       <Container maxWidth="lg">
-        <Home />
-        {/*<FullPost />*/}
-        {/*<AddPost />*/}
-        {/*<Login />*/}
-        {/*<Registration />*/}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/posts/:id" element={<FullPost />} />
+          <Route path="/tags/:tag" element={<HashPosts />} />
+          <Route path="/add-post" element={<AddPost />} />
+          <Route path="/posts/:id/edit" element={<AddPost />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
+        </Routes>
       </Container>
-    </>
+    </BrowserRouter>
   );
 }
 

@@ -9,29 +9,35 @@
   display: flex;
   justify-content: space-between;
 }
+.blockLogo{
+  display: flex;
+  gap: 20px;
+  background-color: rgba(0, 0, 0, 0.27);
+  border-radius: 5px 20px 20px 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 
+  &:hover {
+    background-color: #4361ee;
+  }
+}
 .logo {
-  background-color: black;
   color: #fff;
   font-weight: 700;
   line-height: 35px;
   text-transform: uppercase;
   letter-spacing: 0.15px;
-  border-radius: 5px;
   padding: 0 10px;
   text-decoration: none;
-
-  &:hover {
-    background-color: #4361ee;
-  }
 }
 
 .buttons {
   button {
     margin-left: 10px;
   }
-
   a {
     text-decoration: none;
   }
 }
+

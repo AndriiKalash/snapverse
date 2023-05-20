@@ -9,15 +9,20 @@ import ListItemText from "@mui/material/ListItemText";
 import Skeleton from "@mui/material/Skeleton";
 
 import { SideBlock } from "./SideBlock";
+import { Link } from "react-router-dom";
 
-export const TagsBlock = ({ items, isLoading = true }) => {
+
+
+
+export const TagsBlock = ({ items, isLoading}) => {
+
   return (
-    <SideBlock title="Тэги">
+    <SideBlock title="Tags">
       <List>
-        {(isLoading ? [...Array(5)] : items).map((name, i) => (
-          <a
+        {(isLoading ? [...Array(5)] : items).map((tag, i) => (
+          <Link key={i}
             style={{ textDecoration: "none", color: "black" }}
-            href={`/tags/${name}`}
+            to={`/tags/${tag}`}
           >
             <ListItem key={i} disablePadding>
               <ListItemButton>
@@ -27,11 +32,11 @@ export const TagsBlock = ({ items, isLoading = true }) => {
                 {isLoading ? (
                   <Skeleton width={100} />
                 ) : (
-                  <ListItemText primary={name} />
+                  <ListItemText primary={tag} />
                 )}
               </ListItemButton>
             </ListItem>
-          </a>
+          </Link>
         ))}
       </List>
     </SideBlock>
