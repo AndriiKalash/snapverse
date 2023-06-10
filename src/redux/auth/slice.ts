@@ -1,15 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
+import { RootState } from "../store";
+import { IUserData, IUserArgument, AuthSliceState, StatusUser } from "./type";
 
-export const fetchLoginUser = createAsyncThunk(
-  "auth/fetchLoginUser",
-  async (obj) => {
-    const { data } = await axios.post("/auth/login", obj);
-    return data;
-  }
-);
+export const fetchLoginUser = createAsyncThunk<
+  IUserData,
+  Omit<IUserArgument, "fullName">
+>("auth/fetchLoginUser", async (obj) => {
+  const { data } = await axios.post("/auth/login", obj);
+  return data;
+});
 
-export const fetchRegisterUser = createAsyncThunk(
+export const fetchRegisterUser = createAsyncThunk<IUserData, IUserArgument>(
   "auth/fetchRegisterUser",
   async (obj) => {
     const { data } = await axios.post("/auth/register", obj);
@@ -18,16 +20,19 @@ export const fetchRegisterUser = createAsyncThunk(
 );
 
 //for complite this func should be token in window.localStorage:
-export const fetchAuthMe = createAsyncThunk("auth/fetchAuthMe", async () => {
-  const { data } = await axios.get("/auth/me");
-  return data;
-});
+export const fetchAuthMe = createAsyncThunk<IUserData>(
+  "auth/fetchAuthMe",
+  async () => {
+    const { data } = await axios.get("/auth/me");
+    return data;
+  }
+);
 
 const asyncActions = [fetchRegisterUser, fetchLoginUser, fetchAuthMe];
 
-const initialState = {
+const initialState: AuthSliceState = {
   user: null,
-  statusUser: "loading",
+  statusUser: StatusUser.LOADING,
   isAuth: false,
 };
 
@@ -48,19 +53,19 @@ const authSlice = createSlice({
         })
         .addCase(action.fulfilled, (state, action) => {
           state.user = action.payload;
-          state.statusUser = "idle";
+          state.statusUser = StatusUser.IDLE;
           state.isAuth = true;
         })
         .addCase(action.rejected, (state) => {
           state.user = null;
-          state.statusUser = "error";
+          state.statusUser = StatusUser.ERROR;
         })
     );
     builder.addDefaultCase((state, action) => {});
   },
 });
 
-export const selectorAuthUser = (state) => state.auth;
+export const selectorAuthUser = (state: RootState) => state.auth;
 export const { reducer, actions } = authSlice;
 export const { setLogOut } = actions;
 export default reducer;

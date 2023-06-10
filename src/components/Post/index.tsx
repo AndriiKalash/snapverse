@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import axios from '../../axios';
 import { removePost } from '../../redux/posts/slice';
 import { UserInfo } from '../UserInfo';
@@ -12,8 +11,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import EyeIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import CommentIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import styles from './Post.module.scss';
+import { IPostsData } from '../../redux/posts/type';
+import { useAppDispatch } from '../../hooks';
 
-export const Post = ({
+interface PostProps extends IPostsData {
+  commentsCount: number;
+  children?: ReactNode;
+  isFullPost?: boolean;
+  isEditable?: boolean;
+}
+
+export const Post: React.FC<PostProps>  = ({
   _id,
   title,
   createdAt,
@@ -27,7 +35,7 @@ export const Post = ({
   isEditable,
 }) => {
    
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
   const onClickRemove = () => {
        try {
@@ -61,7 +69,10 @@ export const Post = ({
         />
       )}
       <div className={styles.wrapper}>
-        <UserInfo {...user} additionalText={createdAt} />
+        <UserInfo 
+        fullName = {user.fullName}
+        avatarUrl = {user.avatarUrl}
+        additionalText={createdAt} />
         <div className={styles.indention}>
           <h2 className={clsx(styles.title, { [styles.titleFull]: isFullPost })}>
             {isFullPost ? title : <Link to={`/posts/${_id}`}>{title}</Link>}

@@ -1,23 +1,24 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setLogOut, selectorAuthUser } from '../../redux/auth/slice';
+import { useAppDispatch } from '../../hooks';
+import { StatusUser } from '../../redux/auth/type';
 
 import { Avatar, Skeleton } from '@mui/material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import styles from './Header.module.scss';
 
-export const Header = () => {
+export const Header: React.FC = () => {
 
   const {isAuth, user, statusUser} = useSelector(selectorAuthUser);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const onClickLogout = () => {
     if (window.confirm('are you sure you want to logout?')) {
       dispatch(setLogOut());
-    window.localStorage.removeItem('token','');
+    window.localStorage.removeItem('token');
     navigate("/");
     }
   } 
@@ -28,22 +29,29 @@ export const Header = () => {
         <div className={styles.inner}>
           <div className={styles.blockLogo}>
             <Link className={styles.logo} to="/">
-              <div>
+              <div style={{display:"flex"}}>
            {
               !isAuth || !window.localStorage.getItem('token') || 
-              statusUser==="loading" ?
-              " SNAPVERSE BLOG":
-              user.fullName 
+              statusUser===StatusUser.LOADING  ?
+              <>
+                 SNAPVERSE BLOG 
+                <Skeleton 
+                variant="circular"
+                width={40} height={40} 
+                style={{marginLeft:10}} />
+              </>
+              :
+              <>
+                {user?.fullName ?? ''} 
+                <Avatar 
+                alt={user?.fullName ?? ''} 
+                src={user?.avatarUrl ?? ''}
+                style={{marginLeft:10}}  />
+              </>
+              
             }
               </div>
             </Link>
-            { !isAuth || !window.localStorage.getItem('token') ||
-              statusUser==="loading" ? (
-              <Skeleton variant="circular" width={40} height={40} />
-              ) : (
-              <Avatar alt={user.fullName} src={user.avatarUrl} />
-              )
-            }
           </div>
           <div className={styles.buttons}>
             {isAuth || window.localStorage.getItem('token') ? (

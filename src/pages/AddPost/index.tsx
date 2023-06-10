@@ -10,14 +10,16 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import 'easymde/dist/easymde.min.css';
+import { IPostsData } from '../../redux/posts/type';
 
 
-export const AddPost = () => {
+
+export const AddPost:React.FC = () => {
 
   const navigate = useNavigate();
   const {isAuth} = useSelector(selectorAuthUser);
   const {id} = useParams();
-  const inputFileRef = useRef(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const isEditing = Boolean(id);
  
   const [imageUrl , setImageUrl] = useState('');
@@ -26,7 +28,7 @@ export const AddPost = () => {
   const [tags, setTags] = useState('');
   
   //this spacial func for SimpleMDE component:
-  const onChange = React.useCallback((value) => {
+  const onChange = React.useCallback((value:string) => {
     setText(value);
   }, []);
 
@@ -53,13 +55,21 @@ export const AddPost = () => {
   const getOnePost = async() =>{
       try {
         const {data} = await(axios.get(`/posts/${id}`));
-        setImageUrl(data.imageUrl.replace("http://localhost:4444",""));
-        setText(data.text);
-        setTags(data.tags.join(","));
-        setTitle(data.title);
+        const dataObject: IPostsData = data;
+        if (dataObject) {
+          setImageUrl(
+          dataObject.imageUrl?
+          dataObject.imageUrl.replace("http://localhost:4444","") :
+          ''
+          );
+          setText(dataObject.text);
+          setTags(dataObject.tags.join(","));
+          setTitle(dataObject.title);
+        }
+        
       } catch (error) {
-        alert('could not get post')
-        throw new Error(error);
+        alert('could not get post');
+        throw new Error(error as string);
       }
   };
   useEffect(()=>{
@@ -68,22 +78,23 @@ export const AddPost = () => {
     }
   },[]);
 
-  const handleChangeFile = async(event) => {
+  const handleChangeFile = async(event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      if (file) {
+      if (event.target.files) {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        if (file) {
         formData.append('image', file);
         const {data} = await axios.post('/uploads', formData);
         setImageUrl(data.url);
       }
+      }
+      
     } catch (error) {
-      console.warn(error);
       alert('upload file failed');
+      throw new Error (error as string);
     }
   };
-
-  const onClickRemoveImage = () => {setImageUrl('')};
 
   const handleSubmit = async() => {
     try {
@@ -101,8 +112,8 @@ export const AddPost = () => {
       navigate(`/posts/${data._id}`)
     }
     } catch (error) {
-      console.warn(error);
       alert('upload post failed');
+      throw new Error(error as string);
     }
   }
 
@@ -110,15 +121,19 @@ export const AddPost = () => {
   return (
     <Paper style={{ padding: 30 }}>
       <Button 
-      onClick={()=>inputFileRef.current.click()} 
+      onClick={()=>{
+        if (inputFileRef.current) {
+          inputFileRef.current.click()
+        } 
+      }} 
       variant="outlined" size="large">
-        Upoad image
+        Upload image
       </Button>
       <input ref={inputFileRef} type="file" onChange={handleChangeFile} hidden />
       {
       imageUrl && (
         <>
-        <Button variant="contained" color="error" onClick={onClickRemoveImage}>
+        <Button variant="contained" color="error" onClick={()=> setImageUrl('')}>
           Delete
         </Button>
         <img 

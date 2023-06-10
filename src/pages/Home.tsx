@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../hooks';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -13,20 +14,22 @@ import { PostSkeleton } from '../components/Post/Skeleton';
 import { fetchPosts, fetchTags, postsSelector } from '../redux/posts/slice';
 import { selectorAuthUser } from '../redux/auth/slice';
 import { commentsSelector, fetchComments } from '../redux/comments/slice';
-import {  ListItemAvatar } from '@mui/material';
+import { StatusPostTags } from '../redux/posts/type';
 
 
 
 
-export const Home = () => {
 
-  const dispatch = useDispatch();
+
+export const Home: React.FC = () => {
+
+  const dispatch = useAppDispatch();
   const {posts, tags} = useSelector(postsSelector);
-  const {user, statusUser} = useSelector(selectorAuthUser);
-  const isPostLoading = posts.status === 'loading';
-  const isTagsLoading = tags.status === 'loading';
+  const {user} = useSelector(selectorAuthUser);
+  const isPostLoading = posts.status === StatusPostTags.LOADING;
+  const isTagsLoading = tags.status === StatusPostTags.LOADING;
   const [sort , setSort] = useState("createdAt");
-  const {items, loadingStatus} = useSelector(commentsSelector);
+  const {itemsComment, loadingStatus} = useSelector(commentsSelector);
   
  
   useEffect(()=>{
@@ -38,10 +41,8 @@ export const Home = () => {
     dispatch(fetchComments());
   },[]);
 
-  const setEditable = (id) => {
-    if (user) {
-      return id === user._id;
-    }
+  const setEditable = (id: string): boolean => {
+      return user && id === user._id ? true : false;
   };
 
   
@@ -66,7 +67,7 @@ export const Home = () => {
                 posts.items.length === 0 ?
                  <h3> No one post for today </h3> :
                  posts.items.map((post) => {
-                    const filteredComments = items.filter(
+                    const filteredComments = itemsComment.filter(
                     (comment) => comment.postId === post._id);
                     const commentsCount = filteredComments.length;
                   return (
@@ -87,8 +88,9 @@ export const Home = () => {
           isLoading={isTagsLoading} />
           <CommentsBlock
           items={
-            items.length>3?
-            items.slice(-3):items
+            itemsComment.length>3?
+            itemsComment.slice(-3):
+            itemsComment
           }
           isLoading={loadingStatus}
           />

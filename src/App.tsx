@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import  { useEffect } from "react";
+import { useAppDispatch } from "./hooks";
 import { fetchAuthMe } from "./redux/auth/slice";
 import { Header } from "./components";
 import {
@@ -13,8 +13,9 @@ import {
   HashPosts,
 } from "./pages";
 
-function App() {
-  const dispatch = useDispatch();
+
+const App: React.FC = () => {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (window.localStorage.getItem("token")) {

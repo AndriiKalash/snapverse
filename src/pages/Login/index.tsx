@@ -1,8 +1,7 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { fetchLoginUser, selectorAuthUser } from "../../redux/auth/slice";
 
@@ -11,6 +10,8 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./Login.module.scss";
+import { IUserArgument, IUserData } from "../../redux/auth/type";
+import { useAppDispatch } from "../../hooks";
 
 const schema = yup.object({
   email: yup.string().email('Invalid email').required('E-mail is required'),
@@ -18,22 +19,29 @@ const schema = yup.object({
 });
 
 
-export const Login = () => {
+export const Login:React.FC = () => {
  
   const {isAuth} = useSelector(selectorAuthUser);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {register, handleSubmit,formState:{ errors }} = useForm({
     resolver: yupResolver(schema),
+    defaultValues : {
+      email:'',
+      password:'',
+    },
     mode: "all",//onBlur
   });
 
-  const onSubmit = (value) => {
+  const onSubmit = (value: Omit <IUserArgument, "fullName">) => {
     dispatch(fetchLoginUser(value))
-    .then((res)=>window.localStorage.setItem("token", res.payload.token))
+    .then((res)=> {
+      const payloadData  = res.payload as IUserData;
+      window.localStorage.setItem("token", payloadData.token)
+    })
     .catch((error)=> {
       alert('Faild to login');
-      throw new Error(error);
+      throw new Error(error as string);
     })
   } ;
 

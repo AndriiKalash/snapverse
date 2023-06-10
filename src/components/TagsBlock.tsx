@@ -10,16 +10,20 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { SideBlock } from "./SideBlock";
 import { Link } from "react-router-dom";
+import { Tags } from "../redux/posts/type";
 
 
 
-
-export const TagsBlock = ({ items, isLoading}) => {
+interface TagsBlockProps {
+  items: Tags;
+  isLoading: boolean;
+}
+export const TagsBlock: React.FC<TagsBlockProps> = ({ items, isLoading}) => {
 
   return (
     <SideBlock title="Tags">
       <List>
-        {(isLoading ? [...Array(5)] : items).map((tag, i) => (
+        {(isLoading ? [...Array(5)] : items).map((tag:string, i) => (
           <Link key={i}
             style={{ textDecoration: "none", color: "black" }}
             to={`/tags/${tag}`}

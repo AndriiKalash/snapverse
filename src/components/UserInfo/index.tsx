@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './UserInfo.module.scss';
 
-export const UserInfo = ({ avatarUrl, fullName, additionalText }) => {
+interface UserInfoProps {
+  avatarUrl?: string;
+  fullName: string;
+  additionalText: string;
+}
+
+export const UserInfo: React.FC<UserInfoProps> = ({ avatarUrl, fullName, additionalText }) => {
   return (
     <div className={styles.root}>
       <img 

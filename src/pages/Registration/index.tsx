@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Navigate } from "react-router-dom";
 import { fetchRegisterUser, selectorAuthUser } from '../../redux/auth/slice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from '../../axios';
 
 import Typography from '@mui/material/Typography';
@@ -14,6 +14,9 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import styles from './Login.module.scss';
 import { Skeleton } from '@mui/material';
+import { IUserArgument } from '../../redux/auth/type';
+import { useAppDispatch } from '../../hooks';
+import { IUserData } from '../../redux/auth/type';
 
 
 
@@ -23,13 +26,13 @@ const schema = yup.object({
   password: yup.string().min(5, 'Minimum 5 symbols!').required('password is Required'),
 });
 
-export const Registration = () => {
+export const Registration: React.FC = () => {
   
-  const inputFileRef = useRef(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const [imageAvatar, setImageAvatar] = useState("");
   const [loadingImg, setLoadingImg] = useState("");
   const {isAuth} = useSelector(selectorAuthUser);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
     resolver: yupResolver(schema),
@@ -42,8 +45,8 @@ export const Registration = () => {
     mode: "all",
   });
 
-  const handleImageUpload = (event) => {
-    
+  const handleImageUpload = (event:React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
       const file = event.target.files[0];
       const formData = new FormData();
       if (file) {
@@ -57,18 +60,22 @@ export const Registration = () => {
         }).catch((error) => {
           alert('can not uploud image');
           setLoadingImg('error')
-          throw new Error(error);
+          throw new Error(error as string);
         })
       }
+    }   
   };
 
 
-  const onSubmit = (value) => {
+  const onSubmit = (value: IUserArgument) => {
     dispatch(fetchRegisterUser(value))
-    .then((res)=> window.localStorage.setItem("token", res.payload.token))
+    .then((res)=>  {
+      const payloadData  = res.payload as IUserData;
+        window.localStorage.setItem("token", payloadData.token  )
+    })
     .catch((error) => {
       alert('Faild to register');
-      throw new Error(error);
+      throw new Error(error as string);
     })
   } 
 
@@ -86,7 +93,11 @@ export const Registration = () => {
           loadingImg === "loading" ?
           <Skeleton variant="circular" width={100} height={100} /> :
           <Avatar 
-           onClick={()=>inputFileRef.current.click()}
+           onClick={()=>{
+            if (inputFileRef.current) {
+              inputFileRef.current.click()
+            }
+           }}
            sx={{ width: 100, height: 100 }} 
            src={imageAvatar ? `http://localhost:4444${imageAvatar}` : ''} 
            alt="Avatar Preview"

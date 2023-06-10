@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectorAuthUser } from "../../redux/auth/slice";
 import { postComments } from "../../redux/comments/slice";
 import { Skeleton } from "@mui/material";
 import styles from "./AddComment.module.scss";
+import { useAppDispatch } from "../../hooks";
 
 
-export const Index = ({postId}) => {
+export const Index: React.FC<{postId:string}> = ({postId}) => {
 
   const [text, setText] = useState('');
   const {user, statusUser, isAuth} = useSelector(selectorAuthUser);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
   
   const handleSubmit = () => {
@@ -22,7 +23,7 @@ export const Index = ({postId}) => {
         postId,
         text,
       };
-      dispatch(postComments(commentValue))
+        dispatch(postComments(commentValue));
     } catch (error) {
       console.warn(error);
       alert('upload comment failed');
@@ -31,17 +32,18 @@ export const Index = ({postId}) => {
     }
   }
 
-
-  return (
-    isAuth &&
-    <> 
+  if (!isAuth) {
+    return null;
+  } else {
+    return (
+      <> 
       <div className={styles.root}>
         {
           statusUser==="loading"?
           <Skeleton variant="circular" width={40} height={40} /> :
           <Avatar
           classes={{ root: styles.avatar }}
-          src={ user.avatarUrl?user.avatarUrl : ''}
+          src={ user?.avatarUrl ?? ""}
         />
         }
         
@@ -59,5 +61,8 @@ export const Index = ({postId}) => {
         </div>
       </div>
     </>
-  );
+    )
+    
+  }
+  
 };
