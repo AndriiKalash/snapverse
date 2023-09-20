@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# Snapverse Blog
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Snapverse Blog, a platform where users can explore articles from other users and, with authentication or login, create their own articles and comment on other users' articles. The main page of this app allows users to discover articles, which can be filtered by popularity based on views.
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+- **ReactJS**: The frontend of the application is built using ReactJS, a popular JavaScript library for building user interfaces.
 
-### `npm start`
+- **TypeScript**: TypeScript is used to add static typing to the JavaScript codebase, improving code quality and maintainability.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **MUI (Material-UI)**: MUI is used for designing the user interface, providing a consistent and visually appealing appearance to the app.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React Router**: React Router is used for client-side routing, allowing seamless navigation within the app.
 
-### `npm test`
+- **Redux Toolkit**: Redux Toolkit simplifies state management by providing a set of tools and best practices. It's used to manage application-wide state.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Redux Thunk**: Redux Thunk is a middleware that allows asynchronous actions in Redux. It's used for making HTTP requests and handling side effects.
 
-### `npm run build`
+- **Axios**: Axios is used for making HTTP requests to the personal Express web server and handling data retrieval and submission.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React Hook Form**: This library is utilized for form handling, enabling a smooth and interactive user experience during data entry.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **localStorage**: LocalStorage is used to store user preferences, ensuring that they persist even after refreshing the page.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Express Web Server**: The backend of this app is powered by a personal developed Express web server, which handles user authentication, article creation, and other server-side logic.
 
-### `npm run eject`
+- **MongoDB**: MongoDB is used as the database to store user information, articles, and comments.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **User Authentication**: Users can sign up or log in to access the full functionality of the app, including creating articles and commenting.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Article Creation**: Authenticated users can create their own articles, adding content and details.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Article Commenting**: Users can leave comments on articles created by other users.
 
-## Learn More
+- **Article Discovery**: The main page displays articles, which can be filtered by popularity based on views.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Responsive Design**: The app is designed to work seamlessly on various screen sizes and devices.
